@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style type="text/css">
+        body {
+          font-family: Arial;
+          color: rgb(255, 255, 255);
+          background-color: rgb(89, 89, 89) }
+
+        ul.navbar {
+          position: absolute;
+          top: 2em;
+          left: 1em;
+          width: 9em }
+
+        h1 {
+          font-family: Helvetica, Geneva, Arial,
+                SunSans-Regular, sans-serif }
+        
+        div.titulo {
+            background-color: rgb(242, 76, 61);
+            margin-bottom: 2%;
+            padding: 0.5%;
+            text-align: center;
+            box-shadow: 1px 2px 7px 1px #000000;
+            
+        }
+
+        div.modulo{
+
+            background-color: rgb(61, 61, 61);
+            padding: 0.2%;
+            padding-left: 20px;
+            margin: 1%;
+            box-shadow: 1px 2px 7px 1px #000000;
+
+        }
+
+        input[type=button], input[type=submit], input[type=reset] {
+        
+        background-color: rgb(242, 76, 61);
+        border: none;
+        color: white;
+        padding: 7px 7px;
+        text-decoration: none;
+        font-size: 20px;
+        margin: 10px 2px;
+        cursor: pointer;
+        height: 40px;
+        width: 80px;
+
+        }
+
+        p.palindrome-salida{
+
+            background-color: green;
+
+        }
+
+        .resp{
+            background-color: green;
+            padding: 5px;
+            margin-right: 20px;
+            visibility: hidden;
+        }
+
+    </style>
+    
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="titulo">
+        <H1>Laboratorio #4</H1>
+    </div>
+
+    <div class="contenido">
+
+        <div class="modulo">
+            <h1>Validador de palindromos</h1>
+            <p>Ingrese un número y se validara si es un palindromo de doble base.</p>
+            <form id="palindrome-form" action="#">
+                <input id="palindrome-value" name="palindrome-value" type="text">
+                <br>
+                <input type="submit" value="Validar">
+            </form>
+
+            <p id="palindrome-salida" class="resp"></p>
+
+        </div>
+
+        <div class="modulo">
+            <h1>Contador de caracteres</h1>
+            <p>Ingrese una palabra y se contaran cuantos caracteres tiene de cada tipo.</p>
+            <form id="contador-form" action="#">
+                <input id="contador-value" name="contador-value" type="text">
+                <br>
+                <input type="submit" value="Contar">
+            </form>
+
+            <p id="contador-salida" class="resp"></p>
+
+        </div>
+
+        <div class="modulo">
+            <h1>Validador de año bisiesto</h1>
+            <p>Ingrese un año y se validara si es biciesto.</p>
+            <form id="viciesto-form" action="#">
+                <input id="viciesto-value" name="viciesto-value" type="text">
+                <br>
+                <input type="submit" value="Validar">
+            </form>
+
+            <p id="viciesto-salida" class="resp"></p>
+
+        </div>
+
+        <div class="modulo">
+            <h1>Sumador de unidades</h1>
+            <p>Ingrese un número y se muestra la suma de los números primos de 0 hasta el número.</p>
+            <form id="sumador-form" action="#">
+                <input id="sumador-value" name="sumador-value" type="text">
+                <br>
+                <input type="submit" value="Sumar">
+            </form>
+
+            <p id="sumador-salida" class="resp"></p>
+
+        </div>
+
+    </div>
+
+
+
+    <p id="calculator-result"></p>    
+    <script>
+        (() => {
+            const App = {
+                htmlElements: {
+                    palindromeForm: document.getElementById('palindrome-form'),
+                    contadorForm: document.getElementById('contador-form'),
+                    viciestorForm: document.getElementById('viciesto-form'),
+                    sumadorForm: document.getElementById('sumador-form'),
+
+                    palindromeValue: document.getElementById('palindrome-value'),
+                    contadorValue: document.getElementById('contador-value'),
+                    viciestoValue: document.getElementById('viciesto-value'),
+                    sumadorValue: document.getElementById('sumador-value'),
+
+                    palindromeResult: document.getElementById('palindrome-salida'),
+                    contadorResult: document.getElementById('contador-salida'),
+                    viciestoResult: document.getElementById('viciesto-salida'),
+                    sumadorResult: document.getElementById('sumador-salida'),
+                },
+                init: () => {
+                    App.bindEvents();
+                },
+                bindEvents: () => {
+                    App.htmlElements.palindromeForm.addEventListener('submit', App.events.onPalindromeFormSubmit);
+                    App.htmlElements.contadorForm.addEventListener('submit', App.events.onContadorFormSubmit);
+                    App.htmlElements.viciestorForm.addEventListener('submit', App.events.onViciestoFormSubmit);
+                    App.htmlElements.sumadorForm.addEventListener('submit', App.events.onSumadorFormSubmit);
+                },
+                events: {
+                    onPalindromeFormSubmit: (event) => {
+                        event.preventDefault();
+
+                        const value = String(App.htmlElements.palindromeValue.value);
+
+                        var b_dec = false;
+                        var b_bin = false;
+
+                        var splitString = String(value).split("");
+                        var reverseArray = splitString.reverse();
+                        var joinArray = reverseArray.join("");
+                        
+                        if (String(value) == joinArray){
+
+                            b_dec = true;
+
+                        }
+
+                        var bin = (value >>> 0).toString(2);
+                        
+                        splitString = String(bin).split("");
+                        reverseArray = splitString.reverse();
+                        joinArray = reverseArray.join(""); 
+                        
+                        if (String(bin) == joinArray){
+
+                            b_bin = true;
+
+                        }
+
+                        if(b_dec == true && b_bin == true){
+
+                            const response = `El número es un palindromo de doble base.`;
+                            App.htmlElements.palindromeResult.innerText = response;
+
+                            document.getElementById("palindrome-salida").style.visibility = "visible";
+
+                        }
+                        else{
+
+                            const response = `El número no es un palindromo de doble base.`;
+                            App.htmlElements.palindromeResult.innerText = response;
+
+                            document.getElementById("palindrome-salida").style.visibility = "visible";
+
+                        }
+
+
+
+                    },
+
+                    onContadorFormSubmit: (event) => {
+
+                        event.preventDefault();
+
+                        const value = String(App.htmlElements.contadorValue.value);
+
+                        var objeto = {};
+
+                        for (let i = 0; i < Object.keys(value).length; i++){
+
+                            if (objeto[value[i]]) {
+                                objeto[value[i]]++;
+                            }else{
+                                objeto[value[i]] = 1;
+                            } 
+
+                        }
+
+                        const response = JSON.stringify(objeto);
+                        App.htmlElements.contadorResult.innerText = response;
+                        document.getElementById("contador-salida").style.visibility = "visible";
+                    },
+
+                    onViciestoFormSubmit: (event) => {
+
+                        event.preventDefault();
+
+                        const value = Number(App.htmlElements.viciestoValue.value);
+
+                        console.log(value);
+
+                        var response = '';
+                        
+                        if (((value % 4 == 0) && (value % 100 != 0 )) || (value % 400 == 0)){
+
+                            response = `El año es bisiesto.`;
+                        
+                        }
+                        else{
+
+                            response = `El año no es bisiesto.`;
+
+                        }
+                        
+                        App.htmlElements.viciestoResult.innerText = response;
+                        document.getElementById("viciesto-salida").style.visibility = "visible";
+                    },
+
+                    onSumadorFormSubmit: (event) => {
+                        event.preventDefault();
+
+
+                        const value = Number(App.htmlElements.sumadorValue.value);
+
+                        var suma=2;
+
+                        for (let i = value; i > 0; i--){
+
+                            if (i % 2 == 0)
+                            {
+                                //no es primo
+                            }
+                            else{
+
+                                suma = suma + i;
+
+                            }
+
+                        }
+
+                        const response = suma;
+
+                        console.log(suma)
+
+                        App.htmlElements.sumadorResult.innerText = response;
+
+                        document.getElementById("sumador-salida").style.visibility = "visible";
+                        
+                    },
+                },
+                utils: {
+                        //Maybe later.
+                }
+            };
+
+            App.init();
+        })();
+    </script>
+</body>
+</html>
